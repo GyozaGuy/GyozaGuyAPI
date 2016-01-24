@@ -73,4 +73,5 @@ RSpec.configure do |config|
   config.before(:each, type: :controller) do
     include_default_accept_headers
   end
+  config.include Devise::TestHelpers, type: :controller
 end
