@@ -7,6 +7,11 @@ describe Api::V1::PostsController do
       get :show, id: @post.id
     end
 
+    it 'has the user as an embedded object' do
+      post_response = json_response[:post]
+      expect(post_response[:user][:email]).to eql @post.user.email
+    end
+
     it 'returns the information about a reporter on a hash' do
       post_response = json_response[:post]
       expect(post_response[:title]).to eql @post.title
@@ -19,6 +24,13 @@ describe Api::V1::PostsController do
     before(:each) do
       4.times { FactoryGirl.create :post }
       get :index
+    end
+
+    it 'returns the user object into each post' do
+      posts_response = json_response[:posts]
+      posts_response.each do |post_response|
+        expect(post_response[:user]).to be_present
+      end
     end
 
     it 'returns 4 records from the database' do
