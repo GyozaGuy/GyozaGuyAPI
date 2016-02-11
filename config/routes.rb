@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       # We are going to list our resources here
       resources :users, only: [:show, :create, :update, :destroy]
       resources :sessions, only: [:create, :destroy]
+      resources :posts, only: [:index, :show]
     end
   end
 end
