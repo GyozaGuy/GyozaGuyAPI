@@ -8,7 +8,7 @@ describe Api::V1::PostsController do
     end
 
     it 'returns the information about a reporter on a hash' do
-      post_response = json_response
+      post_response = json_response[:post]
       expect(post_response[:title]).to eql @post.title
     end
 
@@ -23,7 +23,7 @@ describe Api::V1::PostsController do
 
     it 'returns 4 records from the database' do
       posts_response = json_response
-      expect(posts_response).to have(4).items
+      expect(posts_response[:posts]).to have(4).items
     end
 
     it { should respond_with 200 }
@@ -39,7 +39,7 @@ describe Api::V1::PostsController do
       end
 
       it 'renders the json representation for the post record just created' do
-        post_response = json_response
+        post_response = json_response[:post]
         expect(post_response[:title]).to eql @post_attributes[:title]
       end
 
@@ -82,7 +82,7 @@ describe Api::V1::PostsController do
       end
 
       it 'renders the json representation for the updated user' do
-        post_response = json_response
+        post_response = json_response[:post]
         expect(post_response[:title]).to eql 'A test title'
       end
 
