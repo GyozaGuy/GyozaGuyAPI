@@ -4,6 +4,6 @@ FactoryGirl.define do
     time FFaker::Time.date
     content FFaker::HTMLIpsum.fancy_string
     published false
-    user_id 1
+    user
   end
 end
