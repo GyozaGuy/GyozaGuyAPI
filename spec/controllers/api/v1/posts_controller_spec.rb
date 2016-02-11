@@ -26,6 +26,41 @@ describe Api::V1::PostsController do
       get :index
     end
 
+    context 'when is not receiving any product_ids parameter' do
+      before(:each) do
+        get :index
+      end
+
+      it 'returns 4 records from the database' do
+        posts_response = json_response
+        expect(posts_response[:posts]).to have(4).items
+      end
+
+      it 'returns the user object into each post' do
+        posts_response = json_response[:posts]
+        posts_response.each do |post_response|
+          expect(post_response[:user]).to be_present
+        end
+      end
+
+      it { should respond_with 200 }
+    end
+
+    context 'when post_ids parameter is sent' do
+      before(:each) do
+        @user = FactoryGirl.create :user
+        3.times { FactoryGirl.create :post, user: @user }
+        get :index, post_ids: @user.post_ids
+      end
+
+      it 'returns just the posts that belong to the user' do
+        posts_response = json_response[:posts]
+        posts_response.each do |post_response|
+          expect(post_response[:user][:email]).to eql @user.email
+        end
+      end
+    end
+
     it 'returns the user object into each post' do
       posts_response = json_response[:posts]
       posts_response.each do |post_response|
