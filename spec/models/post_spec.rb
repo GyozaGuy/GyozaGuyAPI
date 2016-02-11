@@ -78,4 +78,47 @@ describe Post do
       expect(Post.recent).to match_array([@post3, @post2, @post4, @post1])
     end
   end
+
+  describe '.search' do
+    before(:each) do
+      @post1 = FactoryGirl.create :post, title: 'Test post 1 of doom', content: 'This is sample content'
+      @post2 = FactoryGirl.create :post, title: 'Test post 2', content: 'Hola there'
+      @post3 = FactoryGirl.create :post, title: 'Test post of doom 3', content: 'Eat mor chikin'
+      @post4 = FactoryGirl.create :post, title: 'Test post 4', content: 'Well howdy of doom'
+    end
+
+    context "when title 'doom' and content 'howdy' are set" do
+      it 'returns an empty array' do
+        search_hash = { title_keyword: 'doom', content_keyword: 'howdy' }
+        expect(Post.search(search_hash)).to be_empty
+      end
+    end
+
+    context "when title 'doom' and content 'chikin' are set" do
+      it 'returns post3' do
+        search_hash = { title_keyword: 'doom', content_keyword: 'chikin' }
+        expect(Post.search(search_hash)).to match_array([@post3])
+      end
+    end
+
+    context "when keyword 'doom' is set" do
+      it 'returns post1, post3, and post4' do
+        search_hash = { keyword: 'doom' }
+        expect(Post.search(search_hash).sort).to match_array([@post1, @post3, @post4])
+      end
+    end
+
+    context 'when an empty hash is sent' do
+      it 'returns all of the posts' do
+        expect(Post.search({})).to match_array([@post1, @post2, @post3, @post4])
+      end
+    end
+
+    context 'when post_ids is present' do
+      it 'returns the post from the ids' do
+        search_hash = { post_ids: [@post1.id, @post2.id] }
+        expect(Post.search(search_hash)).to match_array([@post1, @post2])
+      end
+    end
+  end
 end

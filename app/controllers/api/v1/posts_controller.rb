@@ -3,8 +3,7 @@ class Api::V1::PostsController < ApplicationController
   respond_to :json
 
   def index
-    posts = params[:post_ids].present? ? Post.find(params[:post_ids]) : Post.all
-    respond_with posts
+    respond_with Post.search(params)
   end
 
   def show
