@@ -4,10 +4,7 @@ class Api::V1::PostsController < ApplicationController
 
   def index
     posts = Post.search(params).page(params[:page]).per(params[:per_page])
-    render json: posts, meta: { pagination:
-                                   { per_page: params[:per_page],
-                                     total_pages: posts.total_pages,
-                                     total_objects: posts.total_count } }
+    render json: posts, meta: pagination(posts, params[:per_page])
   end
 
   def show
