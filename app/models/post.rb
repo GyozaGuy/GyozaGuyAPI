@@ -11,7 +11,7 @@ class Post < ActiveRecord::Base
   scope :recent, -> { order(:updated_at) }
 
   def self.search(params = {})
-    posts = params[:post_ids].present? ? Post.find(params[:post_ids]) : Post.all
+    posts = params[:post_ids].present? ? Post.where(id: params[:post_ids]) : Post.all
 
     posts = posts.filter_by_title(params[:title_keyword]) if params[:title_keyword]
     posts = posts.filter_by_content(params[:content_keyword]) if params[:content_keyword]
